@@ -3,4 +3,5 @@ import { callAPI,loadAPIkeys,getAPIname } from "./apihopper.js"
 
 loadAPIkeys()
 getAPIname(0)
-await callAPI(0,"http://api.marketstack.com/v1/eod?access_key=APIKEY&symbols=AAPL")
+var result = await callAPI(0,"http://api.marketstack.com/v1/eod?access_key=APIKEY&symbols=AAPL")
+console.log(result)
