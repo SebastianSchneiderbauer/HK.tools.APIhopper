@@ -3,4 +3,4 @@ import { callAPI,loadAPIkeys,getAPIname } from "./apihopper.js"
 
 loadAPIkeys()
 callAPI(0,"r")
-getAPIname(1)
+//getAPIname(1)
