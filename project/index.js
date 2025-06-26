@@ -1,7 +1,12 @@
 //this will contain code to test the program
-import { callAPI,loadAPIkeys,getAPIname } from "./apihopper.js"
+import { callAPI,addAPIkeyCollection,getAPIname } from "./apihopper.js"
+import dotenv from 'dotenv';
+dotenv.config();
 
-loadAPIkeys()
+addAPIkeyCollection(["marketstack","status","200",process.env.MARKETSTACK_API_KEY, process.env.MARKETSTACK_API_KEY_REAL])
+
 getAPIname(0)
+
 var result = await callAPI(0,"http://api.marketstack.com/v1/eod?access_key=APIKEY&symbols=AAPL")
+
 console.log(result)

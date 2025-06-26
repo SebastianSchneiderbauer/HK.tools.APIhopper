@@ -1,19 +1,14 @@
 //APIhopper by Sebastian Schneiderbauer aka HerrKleiderbauer
-import dotenv from 'dotenv';
-dotenv.config();
 
-var apikeys
-var APIkeysloaded = false
+var apikeys = []
 
-export function loadAPIkeys(){
-    apikeys = []
-    apikeys.push(["marketstack","status","200", process.env.MARKETSTACK_API_KEY, process.env.MARKETSTACK_API_KEY_REAL])
-    APIkeysloaded = true
+export function addAPIkeyCollection(keys){
+    apikeys.push(keys)
 }
 
 export function getAPIname(index){
-    if (APIkeysloaded === false){
-        return "APIkeys are not loaded, call \"loadAPIkeys\" first"
+    if (apikeys.length === 0){
+        return "There are no APIkeyCollections loaded right now. Use \"addAPIkeyCollection(\" to load them"
     }
 
     if (typeof(index) != "number"){
@@ -33,8 +28,8 @@ export function getAPIname(index){
 
 export async function callAPI(index,call){
     // handle error cases
-    if (APIkeysloaded === false){
-        return "APIkeys are not loaded, call \"loadAPIkeys\" first"
+    if (apikeys.length === 0){
+        return "There are no APIkeyCollections loaded right now. Use \"addAPIkeyCollection(\" to load them"
     }
 
     if (typeof(index) != "number"){
@@ -51,29 +46,32 @@ export async function callAPI(index,call){
 
     if (typeof(call) != "string"){
         return "\"call\" parameter is not of the right type (needs a string). Provided: " + typeof(index)
-    }
-
+    }    
     //initialize the checkvariables, we assume they are correct
     var checkField = apikeys[index][1]
     var checkValue = apikeys[index][2]
 
-    var keys = apikeys[index].splice(3) //remove api name entry, checkfield and checkvalue
-    var index = 0
+    var keys = apikeys[index].slice(3) //get elements from index 3 onwards without modifying original
+    
+    var loopIndex = 0
     var result
     var response = null
     var callparts = call.split("APIKEY")
 
-    while (response != checkValue && index < keys.length){
-        result = await fetch(callparts[0] + keys[index] + callparts[1])
+    while (response != checkValue && loopIndex < keys.length){
+        result = await fetch(callparts[0] + keys[loopIndex] + callparts[1])
         response = (result[checkField]).toString()
-        console.log(response === checkValue)
-        index += 1
+        //console.log(response === checkValue)
+
+        if (result != null){
+            loopIndex += 1 
+        }
     }
-    
+
     if (response === checkValue){
         return result
     }
     else{
-        return "no APIkey returned a valid response"
+        return "no APIkey returned a valid response."
     }
 }
