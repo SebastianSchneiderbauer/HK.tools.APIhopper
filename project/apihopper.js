@@ -7,7 +7,7 @@ var APIkeysloaded = false
 
 export function loadAPIkeys(){
     apikeys = []
-    apikeys.push(["marketstack","status","200","1338ef2824a47876d546407343ad2b5d"])
+    apikeys.push(["marketstack","status","200", process.env.MARKETSTACK_API_KEY])
     APIkeysloaded = true
 }
 
@@ -22,6 +22,10 @@ export function getAPIname(index){
 
     if (index < 0){
         return "\"index\" parameter needs to be greater than 0. Provided: " + index
+    }
+
+    if (index >= apikeys.length){
+        return "There is no APIkeyCollection with index: " + index
     }
 
     console.log(apikeys[index][0])   
@@ -41,6 +45,10 @@ export async function callAPI(index,call){
         return "\"index\" parameter needs to be greater than 0. Provided: " + index
     }
 
+    if (index >= apikeys.length){
+        return "There is no APIkeyCollection with index: " + index
+    }
+
     if (typeof(call) != "string"){
         return "\"call\" parameter is not of the right type (needs a string). Provided: " + typeof(index)
     }
@@ -51,8 +59,12 @@ export async function callAPI(index,call){
 
     var keys = apikeys[index].splice(3) //remove api name entry, checkfield and checkvalue
     var index = 0
+    var response = null
+    var callparts = call.split("APIKEY")
 
-    var tempkey = process.env.MARKETSTACK_API_KEY
-    var context = await fetch("http://api.marketstack.com/v1/eod?access_key="+tempkey+"&symbols=AAPL")
-    console.log(context["status"].toString())   
+    while (response != checkValue && index < keys.length){
+        response = (await fetch(callparts[0] + keys[index] + callparts[1]))["status"]
+        console.log(response)
+        index += 1
+    }
 }
