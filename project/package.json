@@ -1,0 +1,11 @@
+{
+  "name": "hk.tools.apihopper",
+  "version": "1.0.0",
+  "description": "a little thing for using multiple api keys (where allowed)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "HerrKleiderbauer",
+  "license": "ISC"
+}
