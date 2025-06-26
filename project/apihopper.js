@@ -63,9 +63,7 @@ export async function callAPI(index,call){
         response = (result[checkField]).toString()
         //console.log(response === checkValue)
 
-        if (result != null){
-            loopIndex += 1 
-        }
+        loopIndex += 1 
     }
 
     if (response === checkValue){
